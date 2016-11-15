@@ -1,4 +1,4 @@
-﻿namespace TeamMetrics
+﻿namespace TeamMetrics.App
 {
 	using CsvHelper.Configuration;
 	using CsvHelper.TypeConversion;

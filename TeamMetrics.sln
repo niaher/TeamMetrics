@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TeamMetrics", "src\JiraMetrics\TeamMetrics.xproj", "{C9AFF425-E7F7-406A-BD74-4A45BE0FED85}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TeamMetrics.App", "src\TeamMetrics.App\TeamMetrics.App.xproj", "{C9AFF425-E7F7-406A-BD74-4A45BE0FED85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
