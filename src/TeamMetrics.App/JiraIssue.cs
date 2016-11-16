@@ -28,6 +28,10 @@
 			? this.ReadyForDeployOn.Value.Subtract(this.CodeReviewOn.Value)
 			: (TimeSpan?)null;
 
+		public TimeSpan? TimeToComplete => this.Status == "Done" && this.ResolvedOn != null
+			? this.ResolvedOn.Value.Subtract(this.CreatedOn)
+			: (TimeSpan?)null;
+
 		private static bool IsBetweenDates(DateTime date, DateTime? start, DateTime? end)
 		{
 			var d = date.Date.AbsoluteStart().AddHours(12);

@@ -22,6 +22,11 @@
 		/// </summary>
 		public double AverageTimeInReadyForDeploy { get; set; }
 
+		/// <summary>
+		/// Average number of days from the time a bug reported until the fix is deployed.
+		/// </summary>
+		public double AverateTimeToFixBug { get; set; }
+
 		public List<PersonStats> PersonStats { get; set; } = new List<PersonStats>();
 	}
 }

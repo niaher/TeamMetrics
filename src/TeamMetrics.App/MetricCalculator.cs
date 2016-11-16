@@ -24,6 +24,12 @@
 				StoryPointsInCodeReview = issues.Where(t => t.InCodeReviewOn(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),
 				StoryPointsInProgress = issues.Where(t => t.InProgress(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),
 				StoryPointsReadyForDeploy = issues.Where(t => t.InReadyForDeploy(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),
+				AverateTimeToFixBug = issues
+					.Where(t => t.ResolvedOn <= absoluteEnd && t.ResolvedOn >= monthAgo)
+					.Where(t => t.Type == IssueType.Bug)
+					.Select(t => t.TimeToComplete)
+					.Where(t => t != null)
+					.Average(t => t.Value.TotalDays),
 				AverageTimeInCodeReview = issues
 					.Where(t => t.ReadyForDeployOn <= absoluteEnd && t.ReadyForDeployOn >= monthAgo)
 					.Select(t => t.TimeToReview)
@@ -44,7 +50,7 @@
 				var resolved = resolvedDuring
 					.Where(t => t.Assignee == person)
 					.ToList();
-				
+
 				var personStats = new PersonStats
 				{
 					Name = person,
