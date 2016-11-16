@@ -20,14 +20,22 @@
 		public string FirstReviewer { get; set; }
 		public string SecondReviewer { get; set; }
 
-		public bool InProgress(DateTime date) => IsBetweenDates(date, this.InProgressOn, this.CodeReviewOn);
-		public bool InCodeReviewOn(DateTime date) => IsBetweenDates(date, this.CodeReviewOn, this.ReadyForDeployOn);
-		public bool InReadyForDeploy(DateTime date) => IsBetweenDates(date, this.ReadyForDeployOn, this.ResolvedOn);
+		public TimeSpan? TimeToDeploy => this.Status == "Done" && this.ReadyForDeployOn != null && this.ResolvedOn != null
+			? this.ResolvedOn.Value.Subtract(this.ReadyForDeployOn.Value)
+			: (TimeSpan?)null;
+
+		public TimeSpan? TimeToReview => this.CodeReviewOn != null && this.ReadyForDeployOn != null
+			? this.ReadyForDeployOn.Value.Subtract(this.CodeReviewOn.Value)
+			: (TimeSpan?)null;
 
 		private static bool IsBetweenDates(DateTime date, DateTime? start, DateTime? end)
 		{
 			var d = date.Date.AbsoluteStart().AddHours(12);
 			return d >= start?.AbsoluteStart() && (d < end?.AbsoluteStart() || end == null);
 		}
+
+		public bool InProgress(DateTime date) => IsBetweenDates(date, this.InProgressOn, this.CodeReviewOn);
+		public bool InCodeReviewOn(DateTime date) => IsBetweenDates(date, this.CodeReviewOn, this.ReadyForDeployOn);
+		public bool InReadyForDeploy(DateTime date) => IsBetweenDates(date, this.ReadyForDeployOn, this.ResolvedOn);
 	}
 }

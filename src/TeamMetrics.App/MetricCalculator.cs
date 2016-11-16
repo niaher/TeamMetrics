@@ -12,7 +12,7 @@
 			var absoluteStart = start.AbsoluteStart();
 
 			var createdDuring = issues.Where(t => t.CreatedOn >= absoluteStart && t.CreatedOn <= absoluteEnd).ToList();
-			var resolvedDuring = issues.Where(t => t.ResolvedOn >= absoluteStart && t.ResolvedOn <= absoluteEnd).ToList();
+			var resolvedDuring = issues.Where(t => t.ResolvedOn >= absoluteStart && t.ResolvedOn <= absoluteEnd && t.Status == "Done").ToList();
 			var monthAgo = absoluteEnd.AddDays(-30).AbsoluteEnd();
 
 			var stats = new TeamMetrics
@@ -26,12 +26,14 @@
 				StoryPointsReadyForDeploy = issues.Where(t => t.InReadyForDeploy(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),
 				AverageTimeInCodeReview = issues
 					.Where(t => t.ReadyForDeployOn <= absoluteEnd && t.ReadyForDeployOn >= monthAgo)
-					.Where(t => t.CodeReviewOn != null)
-					.Average(t => t.ReadyForDeployOn.Value.Subtract(t.CodeReviewOn.Value).Days),
+					.Select(t => t.TimeToReview)
+					.Where(t => t != null)
+					.Average(t => t.Value.TotalDays),
 				AverageTimeInReadyForDeploy = issues
 					.Where(t => t.ResolvedOn <= absoluteEnd && t.ResolvedOn >= monthAgo)
-					.Where(t => t.ReadyForDeployOn != null)
-					.Average(t => t.ResolvedOn.Value.Subtract(t.ReadyForDeployOn.Value).Days)
+					.Select(t => t.TimeToDeploy)
+					.Where(t => t != null)
+					.Average(t => t.Value.TotalDays)
 			};
 
 			// Get all people participating in the scrum.
