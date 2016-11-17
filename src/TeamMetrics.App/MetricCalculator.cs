@@ -57,7 +57,7 @@
 					BugsFixed = resolved.Count(t => t.Type == IssueType.Bug),
 					StoryPointsDone = resolved.Sum(t => t.StoryPoints ?? 0),
 					BugsReported = createdDuring.Count(t => t.Reporter == person),
-					StoryPointsInProgress = issues.Where(t => t.Assignee == person && t.InProgress(end)).Sum(t => t.StoryPoints ?? 0),
+					StoryPointsInProgress = issues.Where(t => t.Assignee == person && (t.InProgress(end) || t.InCodeReviewOn(end) || t.InReadyForDeploy(end))).Sum(t => t.StoryPoints ?? 0),
 
 					// Code reviews will count only once the story was done.
 					StoryPointsReviewed = resolvedDuring
