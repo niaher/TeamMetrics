@@ -6,11 +6,11 @@
 
 	"dependencies": {
 		"CsvHelper": "2.16.3",
-        "Microsoft.NETCore.App": {
-            "type": "platform",
-            "version": "1.0.1"
-        },
-        "Newtonsoft.Json": "9.0.1"
+		"Microsoft.NETCore.App": {
+			"type": "platform",
+			"version": "1.0.1"
+		},
+		"Newtonsoft.Json": "9.0.1"
 	},
 
 	"frameworks": {

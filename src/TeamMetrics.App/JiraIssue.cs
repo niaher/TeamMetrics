@@ -1,6 +1,8 @@
 ﻿namespace TeamMetrics.App
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
 	public class JiraIssue
 	{
@@ -16,6 +18,22 @@
 		public decimal? StoryPoints { get; set; }
 		public string Assignee { get; set; }
 		public string Reporter { get; set; }
+		public Priority Priority { get; set; }
+		public string EpicKey { get; set; }
+		public string EpicName { get; set; }
+
+		public IEnumerable<string> Sprints
+			=>
+			new[] { this.Sprint1, this.Sprint2, this.Sprint3, this.Sprint4, this.Sprint5, this.Sprint6, this.Sprint7 }.Where(t => !string.IsNullOrWhiteSpace(t))
+			;
+
+		public string Sprint1 { get; set; }
+		public string Sprint2 { get; set; }
+		public string Sprint3 { get; set; }
+		public string Sprint4 { get; set; }
+		public string Sprint5 { get; set; }
+		public string Sprint6 { get; set; }
+		public string Sprint7 { get; set; }
 
 		public string FirstReviewer { get; set; }
 		public string SecondReviewer { get; set; }
@@ -31,6 +49,8 @@
 		public TimeSpan? TimeToComplete => this.Status == "Done" && this.ResolvedOn != null
 			? this.ResolvedOn.Value.Subtract(this.CreatedOn)
 			: (TimeSpan?)null;
+
+		public JiraIssue Epic { get; set; }
 
 		private static bool IsBetweenDates(DateTime date, DateTime? start, DateTime? end)
 		{

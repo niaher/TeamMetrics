@@ -1,6 +1,7 @@
 ﻿namespace TeamMetrics.App
 {
 	using System;
+	using System.Collections.Generic;
 
 	public static class Extensions
 	{
@@ -37,6 +38,15 @@
 		public static DateTime AbsoluteEnd(this DateTime dateTime)
 		{
 			return AbsoluteStart(dateTime).AddDays(1).AddTicks(-1);
+		}
+
+		public static IEnumerable<T> ForEachItem<T>(this IEnumerable<T> list, Action<T> action)
+		{
+			foreach (var item in list)
+			{
+				action(item);
+				yield return item;
+			}
 		}
 	}
 }

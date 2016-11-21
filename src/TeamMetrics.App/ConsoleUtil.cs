@@ -28,16 +28,16 @@
 			return result;
 		}
 
-		public static void PrintPropertyValues(TeamMetrics stats)
+		public static void PrintObject(object stats)
 		{
 			var properties = stats.GetType().GetProperties();
 
 			foreach (var property in properties)
 			{
-				if (property.PropertyType.GetInterfaces().Contains(typeof(IEnumerable)))
+				if (property.PropertyType.GetInterfaces().Contains(typeof(IEnumerable)) && property.PropertyType != typeof(string))
 				{
 					Console.WriteLine("\n" + property.Name + ":");
-					RenderEnumerableProperty(stats, property);
+					PrintEnumerableProperty(stats, property);
 				}
 				else
 				{
@@ -46,13 +46,38 @@
 			}
 		}
 
-		private static void RenderEnumerableProperty(object obj, PropertyInfo property)
+		public static void WriteHeader(string displayText)
+		{
+			Console.WriteLine(displayText);
+			Console.WriteLine(new string('-', displayText.Length));
+		}
+
+		public static string ReadString(string displayText, string defaultValue = null)
+		{
+			Console.Write(displayText);
+			string input = Console.ReadLine();
+
+			while (string.IsNullOrWhiteSpace(input))
+			{
+				if (defaultValue != null)
+				{
+					return defaultValue;
+				}
+
+				Console.WriteLine("Invalid input. " + displayText);
+				input = Console.ReadLine();
+			}
+
+			return input;
+		}
+
+		public static void PrintEnumerable(IEnumerable enumerable)
 		{
 			List<PropertyInfo> nestedProperties = null;
 			int iteration = 0;
 			Dictionary<string, Column> columns = null;
 
-			foreach (var item in (IEnumerable)property.GetValue(obj, null))
+			foreach (var item in enumerable)
 			{
 				iteration += 1;
 
@@ -92,10 +117,11 @@
 			}
 		}
 
-		public static void WriteHeader(string displayText)
+		private static void PrintEnumerableProperty(object obj, PropertyInfo property)
 		{
-			Console.WriteLine(displayText);
-			Console.WriteLine(new string('-', displayText.Length));
+			var enumerable = (IEnumerable)property.GetValue(obj, null);
+
+			PrintEnumerable(enumerable);
 		}
 
 		private class Column
@@ -106,7 +132,7 @@
 
 				if (property.PropertyType == typeof(string))
 				{
-					extraSpace = 10;
+					extraSpace = 15;
 				}
 
 				this.Format += "{0," + (property.Name.Length + extraSpace) + "}";

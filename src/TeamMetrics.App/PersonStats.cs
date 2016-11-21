@@ -8,7 +8,7 @@
 		public decimal StoryPointsInProgress { get; set; }
 		public int BugsFixed { get; set; }
 		public int BugsReported { get; set; }
-		
+
 		/// <summary>
 		/// Gets overall performance score.
 		/// </summary>

@@ -19,6 +19,16 @@
 			this.Map(m => m.StoryPoints).Name("Custom field (Story Points)").Default(0);
 			this.Map(m => m.Assignee).Name("Assignee");
 			this.Map(m => m.Reporter).Name("Reporter");
+			this.Map(m => m.Priority).Name("Priority");
+			this.Map(m => m.EpicKey).Name("Custom field (Epic Link)");
+			this.Map(m => m.EpicName).Name("Custom field (Epic Name)");
+			this.Map(m => m.Sprint1).Name("Sprint").NameIndex(0);
+			this.Map(m => m.Sprint2).Name("Sprint").NameIndex(1);
+			this.Map(m => m.Sprint3).Name("Sprint").NameIndex(2);
+			this.Map(m => m.Sprint4).Name("Sprint").NameIndex(3);
+			this.Map(m => m.Sprint5).Name("Sprint").NameIndex(4);
+			this.Map(m => m.Sprint6).Name("Sprint").NameIndex(5);
+			this.Map(m => m.Sprint7).Name("Sprint").NameIndex(6);
 
 			this.Map(m => m.FirstReviewer).Name("Custom field (Reviewed By)").NameIndex(0);
 			this.Map(m => m.SecondReviewer).Name("Custom field (Reviewed By)").NameIndex(1);
