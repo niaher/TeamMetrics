@@ -41,6 +41,21 @@
 			return AbsoluteStart(dateTime).AddDays(1).AddTicks(-1);
 		}
 
+		public static IEnumerable<DateTime> Enumerate(this DateTime start, TimeSpan period, DateTime until)
+		{
+			if (start >= until)
+			{
+				throw new ArgumentOutOfRangeException(nameof(until));
+			}
+
+			var at = start;
+			while (at <= until)
+			{
+				yield return at;
+				at = at.Add(period);
+			}
+		}
+
 		public static IEnumerable<T> ForEachItem<T>(this IEnumerable<T> list, Action<T> action)
 		{
 			foreach (var item in list)
@@ -49,7 +64,7 @@
 				yield return item;
 			}
 		}
-
+		
 		public static void Write<T>(this ExcelWorksheet worksheet, int row, StoryPointStats<T> metric, string sprintName)
 		{
 			worksheet.Cells[row, 1].Value = sprintName;

@@ -5,6 +5,8 @@
 	using System.IO;
 	using System.Linq;
 	using CsvHelper;
+	using global::TeamMetrics.App.Excel;
+	using OfficeOpenXml;
 
 	public class Program
 	{
@@ -14,35 +16,69 @@
 
 			//ByTimePeriod(issues);
 
-			BySprint(issues);
+			//BySprint(issues);
+
+			ExportMetrics(issues);
 
 			Console.WriteLine("Enter any key to exit...");
 			Console.ReadKey();
 		}
 
+		private static void ExportMetrics(List<JiraIssue> issues)
+		{
+			using (var workbook = new ExcelPackage())
+			{
+				// By priority.
+				var byPriority = issues
+					.SelectMany(t => t.Sprints)
+					.Distinct()
+					.Select(t => MetricCalculator.CalculateSprintMetrics(issues, t))
+					.Select(sprint => sprint.StoryPointsByPriority.Select(stat => new WorksheetRow<StoryPointStats<Priority>>(sprint.Sprint, stat)))
+					.SelectMany(t => t.ToList())
+					.ToList();
+
+				workbook.Workbook.Worksheets.Add("Sprints by priority").Write(byPriority);
+
+				// By epics.
+				var byEpics = issues
+					.SelectMany(t => t.Sprints)
+					.Distinct()
+					.Select(t => MetricCalculator.CalculateSprintMetrics(issues, t))
+					.Select(sprint => sprint.StoryPointsByEpic.Select(stat => new WorksheetRow<StoryPointStats<string>>(sprint.Sprint, stat)))
+					.SelectMany(t => t.ToList())
+					.ToList();
+
+				workbook.Workbook.Worksheets.Add("Sprints by epics").Write(byEpics);
+
+				// Calculate weekly metrics.
+				var week1 = issues.Min(t => t.CreatedOn).AddDays(1).Last(DayOfWeek.Sunday);
+				var week = new TimeSpan(7, 0, 0, 0);
+				var weeks = week1.Enumerate(week, DateTime.Today);
+				var weekMetrics = weeks
+					.Select(t => new WorksheetRow<TeamMetrics>(t.ToString("yyyy-MM-dd"), MetricCalculator.CalculateStats(issues, t, t.Add(week))))
+					.ToList();
+
+				workbook.Workbook.Worksheets.Add("Weekly").Write(weekMetrics);
+
+				workbook.SaveAs(new FileInfo("metrics.xlsx"));
+			}
+		}
+
 		private static void BySprint(List<JiraIssue> issues)
 		{
-			//var previousSprint = issues
-			//	.SelectMany(t => t.Sprints)
-			//	.Where(t => !string.IsNullOrWhiteSpace(t))
-			//	.OrderByDescending(t => t)
-			//	.First();
-
-			//var sprint = ConsoleUtil.ReadString("Sprint:", previousSprint);
-			//var byPriority = MetricCalculator.CalculateSprintMetrics(issues, sprint);
-
-			//Console.Clear();
-			//ConsoleUtil.WriteHeader($"## Stats for sprint {sprint}");
-
-			//ConsoleUtil.PrintObject(byPriority);
-
-			var sprints = issues
+			var previousSprint = issues
 				.SelectMany(t => t.Sprints)
-				.Distinct()
-				.Select(t => MetricCalculator.CalculateSprintMetrics(issues, t))
-				.ToList();
+				.Where(t => !string.IsNullOrWhiteSpace(t))
+				.OrderByDescending(t => t)
+				.First();
 
-			ExcelExporter.Export(sprints);
+			var sprint = ConsoleUtil.ReadString("Sprint:", previousSprint);
+			var byPriority = MetricCalculator.CalculateSprintMetrics(issues, sprint);
+
+			Console.Clear();
+			ConsoleUtil.WriteHeader($"## Stats for sprint {sprint}");
+
+			ConsoleUtil.PrintObject(byPriority);
 		}
 
 		private static void ByTimePeriod(List<JiraIssue> issues)

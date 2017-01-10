@@ -1,12 +1,12 @@
 ﻿namespace TeamMetrics.App
 {
 	using System.Collections.Generic;
-	using System.IO;
 	using global::TeamMetrics.App.Excel;
+	using OfficeOpenXml;
 
-	internal class ExcelExporter
+	internal static class ExcelExporter
 	{
-		public static void Export(IEnumerable<SprintMetrics> sprints)
+		public static void Export(this ExcelWorksheet worksheet, IEnumerable<SprintMetrics> sprints)
 		{
 			var results = new List<Metric>();
 
@@ -23,8 +23,7 @@
 				}
 			}
 
-			var excel = ExcelGenerator.Generate("Summary", results);
-			excel.SaveAs(new FileInfo("metrics.xlsx"));
+			worksheet.Write(results);
 		}
 
 		private class Metric

@@ -29,16 +29,19 @@
 					.Where(t => t.Type == IssueType.Bug)
 					.Select(t => t.TimeToComplete)
 					.Where(t => t != null)
+					.DefaultIfEmpty(TimeSpan.FromDays(0))
 					.Average(t => t.Value.TotalDays),
 				AverageTimeInCodeReview = issues
 					.Where(t => t.ReadyForDeployOn <= absoluteEnd && t.ReadyForDeployOn >= monthAgo)
 					.Select(t => t.TimeToReview)
 					.Where(t => t != null)
+					.DefaultIfEmpty(TimeSpan.FromDays(0))
 					.Average(t => t.Value.TotalDays),
 				AverageTimeInReadyForDeploy = issues
 					.Where(t => t.ResolvedOn <= absoluteEnd && t.ResolvedOn >= monthAgo)
 					.Select(t => t.TimeToDeploy)
 					.Where(t => t != null)
+					.DefaultIfEmpty(TimeSpan.FromDays(0))
 					.Average(t => t.Value.TotalDays)
 			};
 
