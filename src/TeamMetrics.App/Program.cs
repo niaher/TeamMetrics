@@ -16,24 +16,33 @@
 
 			BySprint(issues);
 
+			Console.WriteLine("Enter any key to exit...");
 			Console.ReadKey();
 		}
 
 		private static void BySprint(List<JiraIssue> issues)
 		{
-			var previousSprint = issues
+			//var previousSprint = issues
+			//	.SelectMany(t => t.Sprints)
+			//	.Where(t => !string.IsNullOrWhiteSpace(t))
+			//	.OrderByDescending(t => t)
+			//	.First();
+
+			//var sprint = ConsoleUtil.ReadString("Sprint:", previousSprint);
+			//var byPriority = MetricCalculator.CalculateSprintMetrics(issues, sprint);
+
+			//Console.Clear();
+			//ConsoleUtil.WriteHeader($"## Stats for sprint {sprint}");
+
+			//ConsoleUtil.PrintObject(byPriority);
+
+			var sprints = issues
 				.SelectMany(t => t.Sprints)
-				.Where(t => !string.IsNullOrWhiteSpace(t))
-				.OrderByDescending(t => t)
-				.First();
+				.Distinct()
+				.Select(t => MetricCalculator.CalculateSprintMetrics(issues, t))
+				.ToList();
 
-			var sprint = ConsoleUtil.ReadString("Sprint:", previousSprint);
-			var byPriority = MetricCalculator.CalculateSprintMetrics(issues, sprint);
-
-			Console.Clear();
-			ConsoleUtil.WriteHeader($"## Stats for sprint {sprint}");
-
-			ConsoleUtil.PrintObject(byPriority);
+			ExcelExporter.Export(sprints);
 		}
 
 		private static void ByTimePeriod(List<JiraIssue> issues)

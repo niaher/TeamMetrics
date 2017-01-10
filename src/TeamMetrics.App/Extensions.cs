@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using OfficeOpenXml;
 
 	public static class Extensions
 	{
@@ -47,6 +48,17 @@
 				action(item);
 				yield return item;
 			}
+		}
+
+		public static void Write<T>(this ExcelWorksheet worksheet, int row, StoryPointStats<T> metric, string sprintName)
+		{
+			worksheet.Cells[row, 1].Value = sprintName;
+			worksheet.Cells[row, 2].Value = metric.Segment;
+			worksheet.Cells[row, 3].Value = metric.Open;
+			worksheet.Cells[row, 4].Value = metric.InProgress;
+			worksheet.Cells[row, 5].Value = metric.InCodeReview;
+			worksheet.Cells[row, 6].Value = metric.ReadyForDeploy;
+			worksheet.Cells[row, 7].Value = metric.Done;
 		}
 	}
 }
