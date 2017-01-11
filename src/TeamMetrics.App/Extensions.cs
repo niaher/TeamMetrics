@@ -51,8 +51,16 @@
 			var at = start;
 			while (at <= until)
 			{
+				var next = at.Add(period);
+
+				if (next > until)
+				{
+					break;
+				}
+
 				yield return at;
-				at = at.Add(period);
+
+				at = next;
 			}
 		}
 

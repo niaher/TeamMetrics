@@ -6,6 +6,7 @@
 	using System.IO;
 	using System.Linq;
 	using System.Reflection;
+	using Humanizer;
 	using OfficeOpenXml;
 	using OfficeOpenXml.Style;
 
@@ -108,10 +109,12 @@
 
 			foreach (var property in properties)
 			{
+				var headerText = property.Name.Humanize();
+
 				switch (Type.GetTypeCode(property.PropertyType))
 				{
 					case TypeCode.DateTime:
-						columns.Add(new Column<T>(property.Name, t => new CellData(t.GetDateString(property))));
+						columns.Add(new Column<T>(headerText, t => new CellData(t.GetDateString(property))));
 						break;
 					case TypeCode.Object:
 						var type = property.PropertyType;
@@ -120,19 +123,19 @@
 							switch (Type.GetTypeCode(type.GetGenericArguments()[0]))
 							{
 								case TypeCode.DateTime:
-									columns.Add(new Column<T>(property.Name, t => new CellData(t.GetDateString(property))));
+									columns.Add(new Column<T>(headerText, t => new CellData(t.GetDateString(property))));
 									break;
 								case TypeCode.Object:
 									break;
 								default:
-									columns.Add(new Column<T>(property.Name, t => new CellData(t.GetPropertyValue(property.Name))));
+									columns.Add(new Column<T>(headerText, t => new CellData(t.GetPropertyValue(property.Name))));
 									break;
 							}
 						}
 
 						break;
 					default:
-						columns.Add(new Column<T>(property.Name, t => new CellData(t.GetPropertyValue(property.Name))));
+						columns.Add(new Column<T>(headerText, t => new CellData(t.GetPropertyValue(property.Name))));
 						break;
 				}
 			}
