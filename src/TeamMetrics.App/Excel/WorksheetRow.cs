@@ -2,13 +2,13 @@
 {
 	public class WorksheetRow<T>
 	{
-		public WorksheetRow(string key, T row)
+		public WorksheetRow(string keyValue, T row)
 		{
-			this.Key = key;
+			this.KeyValue = keyValue;
 			this.Row = row;
 		}
 
-		public string Key { get; set; }
+		public string KeyValue { get; set; }
 
 		public T Row { get; set; }
 	}

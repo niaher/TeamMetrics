@@ -54,13 +54,14 @@
 		/// </summary>
 		/// <typeparam name="T">Type of data that will be put in a table.</typeparam>
 		/// <param name="data">List of items to render.</param>
+		/// <param name="keyHeaderText"></param>
 		/// <param name="worksheet">Worksheet to which to write.</param>
 		/// <returns>ExcelFile instance.</returns>
-		public static void Write<T>(this ExcelWorksheet worksheet, IList<WorksheetRow<T>> data)
+		public static void Write<T>(this ExcelWorksheet worksheet, IList<WorksheetRow<T>> data, string keyHeaderText)
 		{
 			var columns = GetColumns<T>()
 				.Select(t => new Column<WorksheetRow<T>>(t.HeaderText, a => t.GetValueMethod(a.Row)))
-				.Prepend(new Column<WorksheetRow<T>>("Key", t => new CellData(t.Key)))
+				.Prepend(new Column<WorksheetRow<T>>(keyHeaderText, t => new CellData(t.KeyValue)))
 				.ToList();
 			
 			worksheet.Write(columns, data);

@@ -37,7 +37,7 @@
 					.SelectMany(t => t.ToList())
 					.ToList();
 
-				workbook.Workbook.Worksheets.Add("Sprints by priority").Write(byPriority);
+				workbook.Workbook.Worksheets.Add("Sprints by priority").Write(byPriority, "Sprint");
 
 				// By epics.
 				var byEpics = issues
@@ -48,7 +48,7 @@
 					.SelectMany(t => t.ToList())
 					.ToList();
 
-				workbook.Workbook.Worksheets.Add("Sprints by epics").Write(byEpics);
+				workbook.Workbook.Worksheets.Add("Sprints by epics").Write(byEpics, "Sprint");
 
 				// Calculate weekly metrics.
 				var week1 = issues.Min(t => t.CreatedOn).AddDays(1).Last(DayOfWeek.Sunday);
@@ -58,7 +58,7 @@
 					.Select(t => new WorksheetRow<TeamMetrics>(t.ToString("yyyy-MM-dd"), MetricCalculator.CalculateStats(issues, t, t.Add(week))))
 					.ToList();
 
-				workbook.Workbook.Worksheets.Add("Weekly").Write(weekMetrics);
+				workbook.Workbook.Worksheets.Add("Weekly").Write(weekMetrics, "Week");
 
 				workbook.SaveAs(new FileInfo("metrics.xlsx"));
 			}
