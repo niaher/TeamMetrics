@@ -21,6 +21,7 @@
 				NewBugs = createdDuring.Count(t => t.Type == IssueType.Bug),
 				ResolvedBugs = resolvedDuring.Count(t => t.Type == IssueType.Bug),
 				StoryPointsDone = resolvedDuring.Sum(t => t.StoryPoints ?? 0),
+				StoryPointsCarriedOver = resolvedDuring.Where(t => t.InProgressOn < start).Sum(t => t.StoryPoints ?? 0),
 				StoryPointsInCodeReview = issues.Where(t => t.InCodeReviewOn(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),
 				StoryPointsInProgress = issues.Where(t => t.InProgress(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),
 				StoryPointsReadyForDeploy = issues.Where(t => t.InReadyForDeploy(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),

@@ -27,6 +27,11 @@
 		/// </summary>
 		public double AverateTimeToFixBug { get; set; }
 
+		/// <summary>
+		/// Number of "done" points for which the tasks were picked before the reporting period.
+		/// </summary>
+		public decimal StoryPointsCarriedOver { get; set; }
+
 		public List<PersonStats> PersonStats { get; set; } = new List<PersonStats>();
 	}
 }

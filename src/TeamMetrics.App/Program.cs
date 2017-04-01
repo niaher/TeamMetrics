@@ -60,6 +60,13 @@
 
 				workbook.Workbook.Worksheets.Add("Weekly").Write(weekMetrics, "Week");
 
+				// Person stats.
+				var personMetrics = weekMetrics
+					.SelectMany(t => t.Row.PersonStats.Select(a => new WorksheetRow<PersonStats>(t.KeyValue, a)))
+					.ToList();
+
+				workbook.Workbook.Worksheets.Add("Weekly by dev").Write(personMetrics, "Week");
+
 				workbook.SaveAs(new FileInfo("metrics.xlsx"));
 			}
 		}
