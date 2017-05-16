@@ -1,16 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A95DB67C-29E0-43EA-8B80-8C581C2CD30C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{22183AB4-53AB-409D-B8E2-46983978E92D}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TeamMetrics.App", "src\TeamMetrics.App\TeamMetrics.App.xproj", "{C9AFF425-E7F7-406A-BD74-4A45BE0FED85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamMetrics.App", "src\TeamMetrics.App\TeamMetrics.App.csproj", "{C9AFF425-E7F7-406A-BD74-4A45BE0FED85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
