@@ -17,7 +17,6 @@
 
 			var stats = new TeamMetrics
 			{
-				IssueCount = issues.Count,
 				NewBugs = createdDuring.Count(t => t.Type == IssueType.Bug),
 				ResolvedBugs = resolvedDuring.Count(t => t.Type == IssueType.Bug),
 				StoryPointsDone = resolvedDuring.Sum(t => t.StoryPoints ?? 0),

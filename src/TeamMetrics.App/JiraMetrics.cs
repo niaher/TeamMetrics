@@ -4,7 +4,6 @@
 
 	public class TeamMetrics
 	{
-		public int IssueCount { get; set; }
 		public int NewBugs { get; set; }
 		public decimal StoryPointsDone { get; set; }
 		public int ResolvedBugs { get; set; }
