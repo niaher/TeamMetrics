@@ -6,7 +6,7 @@
 
 	public static class Extensions
 	{
-		public static DateTime Last(this DateTime now, DayOfWeek dayOfWeek, int weeksAgo = 1)
+		public static DateTime Previous(this DateTime now, DayOfWeek dayOfWeek, int weeksAgo = 1)
 		{
 			DayOfWeek lastDayOfWeek = dayOfWeek;
 			var week = 0;
@@ -51,7 +51,7 @@
 			var at = start;
 			while (at <= until)
 			{
-				var next = at.Add(period);
+				var next = at.Add(period).Date;
 
 				if (next > until)
 				{
@@ -82,6 +82,16 @@
 			worksheet.Cells[row, 5].Value = metric.InCodeReview;
 			worksheet.Cells[row, 6].Value = metric.ReadyForDeploy;
 			worksheet.Cells[row, 7].Value = metric.Done;
+		}
+
+		public static int Round(this double value)
+		{
+			return (int)Math.Round(value);
+		}
+
+		public static decimal Round(this decimal value, int decimals)
+		{
+			return Math.Round(value, decimals);
 		}
 	}
 }

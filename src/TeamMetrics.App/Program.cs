@@ -51,7 +51,7 @@
 				workbook.Workbook.Worksheets.Add("Sprints by epics").Write(byEpics, "Sprint");
 
 				// Calculate weekly metrics.
-				var week1 = issues.Min(t => t.CreatedOn).AddDays(1).Last(DayOfWeek.Sunday);
+				var week1 = issues.Min(t => t.CreatedOn).AddDays(1).Previous(DayOfWeek.Sunday);
 				var week = new TimeSpan(7, 0, 0, 0);
 				var weeks = week1.Enumerate(week, DateTime.Today).ToList();
 				var weekMetrics = weeks
@@ -90,7 +90,7 @@
 
 		private static void ByTimePeriod(List<JiraIssue> issues)
 		{
-			var lastSaturday = DateTime.Today.Last(DayOfWeek.Saturday).Date;
+			var lastSaturday = DateTime.Today.Previous(DayOfWeek.Saturday).Date;
 
 			var startDate = ConsoleUtil.ReadDateTime("Start date:", lastSaturday.AddDays(-6).Date);
 			var endDate = ConsoleUtil.ReadDateTime("End date:", lastSaturday);

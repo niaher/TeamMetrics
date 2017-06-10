@@ -69,10 +69,32 @@
 						.Sum(t => t.StoryPoints ?? 0)
 				};
 
+				var totalDays = (decimal)absoluteEnd.Subtract(absoluteStart).TotalDays;
+				var totalWorkDays = totalDays - (totalDays / 7 * 5);
+				personStats.FocusFactor = Math.Round(personStats.StoryPointsDone / totalWorkDays, 2);
+
 				stats.PersonStats.Add(personStats);
 			}
 
 			stats.PersonStats = stats.PersonStats.OrderByDescending(t => t.Score).ToList();
+
+			var devs = stats.PersonStats.Where(t => t.FocusFactor > 0.2m).ToList();
+
+			if (devs.Count > 0)
+			{
+				var average = new PersonStats
+				{
+					Name = "average",
+					StoryPointsDone = devs.Average(t => t.StoryPointsDone).Round(2),
+					BugsFixed = devs.Average(t => t.BugsFixed).Round(),
+					BugsReported = devs.Average(t => t.BugsReported).Round(),
+					StoryPointsInProgress = devs.Average(t => t.StoryPointsInProgress).Round(2),
+					StoryPointsReviewed = devs.Average(t => t.StoryPointsReviewed).Round(2),
+					FocusFactor = devs.Average(t => t.FocusFactor).Round(2)
+				};
+
+				stats.PersonStats.Add(average);
+			}
 
 			return stats;
 		}

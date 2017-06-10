@@ -1,4 +1,6 @@
-﻿namespace TeamMetrics.App
+﻿using System;
+
+namespace TeamMetrics.App
 {
 	public class PersonStats
 	{
@@ -13,10 +15,12 @@
 		/// Gets overall performance score.
 		/// </summary>
 		public decimal Score =>
-			this.StoryPointsDone +
-			this.BugsFixed * 0.2m +
-			this.StoryPointsReviewed * 0.1m +
-			this.BugsReported * 0.1m +
-			this.StoryPointsInProgress * 0.5m;
+			Math.Round(this.StoryPointsDone +
+			           this.BugsFixed * 0.2m +
+			           this.StoryPointsReviewed * 0.1m +
+			           this.BugsReported * 0.1m +
+			           this.StoryPointsInProgress * 0.5m, 2);
+
+		public decimal FocusFactor { get; set; }
 	}
 }
