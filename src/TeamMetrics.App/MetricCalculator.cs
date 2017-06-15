@@ -30,19 +30,22 @@
 					.Select(t => t.TimeToComplete)
 					.Where(t => t != null)
 					.DefaultIfEmpty(TimeSpan.FromDays(0))
-					.Average(t => t.Value.TotalDays),
+					.Average(t => t.Value.TotalDays)
+					.Round(2),
 				AverageTimeInCodeReview = issues
 					.Where(t => t.ReadyForDeployOn <= absoluteEnd && t.ReadyForDeployOn >= monthAgo)
 					.Select(t => t.TimeToReview)
 					.Where(t => t != null)
 					.DefaultIfEmpty(TimeSpan.FromDays(0))
-					.Average(t => t.Value.TotalDays),
+					.Average(t => t.Value.TotalDays)
+					.Round(2),
 				AverageTimeInReadyForDeploy = issues
 					.Where(t => t.ResolvedOn <= absoluteEnd && t.ResolvedOn >= monthAgo)
 					.Select(t => t.TimeToDeploy)
 					.Where(t => t != null)
 					.DefaultIfEmpty(TimeSpan.FromDays(0))
 					.Average(t => t.Value.TotalDays)
+					.Round(2)
 			};
 
 			// Get all people participating in the scrum.

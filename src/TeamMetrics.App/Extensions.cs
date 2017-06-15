@@ -89,6 +89,11 @@
 			return (int)Math.Round(value);
 		}
 
+		public static double Round(this double value, int decimals)
+		{
+			return Math.Round(value, decimals);
+		}
+
 		public static decimal Round(this decimal value, int decimals)
 		{
 			return Math.Round(value, decimals);

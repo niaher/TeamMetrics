@@ -24,7 +24,7 @@
 
 		public IEnumerable<string> Sprints
 			=>
-			new[] { this.Sprint1, this.Sprint2, this.Sprint3, this.Sprint4, this.Sprint5, this.Sprint6, this.Sprint7 }.Where(t => !string.IsNullOrWhiteSpace(t))
+			new[] { this.Sprint1, this.Sprint2, this.Sprint3, this.Sprint4, this.Sprint5, this.Sprint6 }.Where(t => !string.IsNullOrWhiteSpace(t))
 			;
 
 		public string Sprint1 { get; set; }
@@ -33,8 +33,7 @@
 		public string Sprint4 { get; set; }
 		public string Sprint5 { get; set; }
 		public string Sprint6 { get; set; }
-		public string Sprint7 { get; set; }
-
+		
 		public string FirstReviewer { get; set; }
 		public string SecondReviewer { get; set; }
 

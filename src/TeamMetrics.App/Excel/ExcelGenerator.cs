@@ -61,7 +61,10 @@
 		public static void Write<T>(this ExcelWorksheet worksheet, IList<WorksheetRow<T>> data, string keyHeaderText)
 		{
 			var columns = GetColumns<T>()
-				.Select(t => new Column<WorksheetRow<T>>(t.HeaderText, a => t.GetValueMethod(a.Row)))
+				.Select(t => new Column<WorksheetRow<T>>(t.HeaderText, a => t.GetValueMethod(a.Row))
+				{
+					Attribute = t.Attribute
+				})
 				.Prepend(new Column<WorksheetRow<T>>(keyHeaderText, t => new CellData(t.KeyValue)))
 				.ToList();
 			
@@ -111,10 +114,12 @@
 			{
 				var headerText = property.Name.Humanize();
 
+				Column<T> column = null;
+
 				switch (Type.GetTypeCode(property.PropertyType))
 				{
 					case TypeCode.DateTime:
-						columns.Add(new Column<T>(headerText, t => new CellData(t.GetDateString(property))));
+						column = new Column<T>(headerText, t => new CellData(t.GetDateString(property)));
 						break;
 					case TypeCode.Object:
 						var type = property.PropertyType;
@@ -123,24 +128,30 @@
 							switch (Type.GetTypeCode(type.GetGenericArguments()[0]))
 							{
 								case TypeCode.DateTime:
-									columns.Add(new Column<T>(headerText, t => new CellData(t.GetDateString(property))));
+									column = new Column<T>(headerText, t => new CellData(t.GetDateString(property)));
 									break;
 								case TypeCode.Object:
 									break;
 								default:
-									columns.Add(new Column<T>(headerText, t => new CellData(t.GetPropertyValue(property.Name))));
+									column = new Column<T>(headerText, t => new CellData(t.GetPropertyValue(property.Name)));
 									break;
 							}
 						}
 
 						break;
 					default:
-						columns.Add(new Column<T>(headerText, t => new CellData(t.GetPropertyValue(property.Name))));
+						column = new Column<T>(headerText, t => new CellData(t.GetPropertyValue(property.Name)));
 						break;
+				}
+
+				if (column != null)
+				{
+					column.Attribute = property.GetCustomAttribute<ExcelColumnAttribute>();
+					columns.Add(column);
 				}
 			}
 
-			return columns;
+			return columns.OrderBy(t => t.Attribute?.OrderIndex ?? 0).ToList();
 		}
 
 		public static object GetPropertyValue(this object obj, string propertyName)
@@ -187,16 +198,17 @@
 		{
 			for (int c = 0; c < columns.Count; ++c)
 			{
-				worksheet.Cells[startRow, startColumn + c].Value = columns[c].HeaderText;
+				var cell = worksheet.Cells[startRow, startColumn + c];
+				var column = columns[c];
+
+				cell.Value = column.HeaderText;
+
+				cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+				cell.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(column.Attribute?.HeaderBackgroundColor ?? "#000"));
+
+				cell.Style.Font.Color.SetColor(ColorTranslator.FromHtml(column.Attribute?.HeaderFontColor ?? "#fff"));
+				cell.Style.Font.Bold = true;
 			}
-
-			var headerCells = worksheet.Cells[startRow, startColumn, startRow, columns.Count];
-
-			headerCells.Style.Fill.PatternType = ExcelFillStyle.Solid;
-			headerCells.Style.Fill.BackgroundColor.SetColor(Color.Black);
-
-			headerCells.Style.Font.Color.SetColor(Color.White);
-			headerCells.Style.Font.Bold = true;
 		}
 
 		private static ExcelPackage EmptyFile()

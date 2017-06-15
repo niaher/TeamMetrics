@@ -28,7 +28,6 @@
 			this.Map(m => m.Sprint4).Name("Sprint").NameIndex(3);
 			this.Map(m => m.Sprint5).Name("Sprint").NameIndex(4);
 			this.Map(m => m.Sprint6).Name("Sprint").NameIndex(5);
-			this.Map(m => m.Sprint7).Name("Sprint").NameIndex(6);
 
 			this.Map(m => m.FirstReviewer).Name("Custom field (Reviewed By)").NameIndex(0);
 			this.Map(m => m.SecondReviewer).Name("Custom field (Reviewed By)").NameIndex(1);

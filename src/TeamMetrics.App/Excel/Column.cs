@@ -23,5 +23,7 @@
 		/// Gets or sets function to render column's contents.
 		/// </summary>
 		public Func<T, CellData> GetValueMethod { get; set; }
+
+		public ExcelColumnAttribute Attribute { get; set; }
 	}
 }
