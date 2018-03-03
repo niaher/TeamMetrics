@@ -26,10 +26,16 @@
 		[ExcelColumn(OrderIndex = 10, HeaderBackgroundColor = "#f00")]
 		public int NewBugs { get; set; }
 
+		[ExcelColumn(OrderIndex = 15)]
+		public int NewIssues { get; set; }
+
 		public List<PersonStats> PersonStats { get; set; } = new List<PersonStats>();
 
 		[ExcelColumn(OrderIndex = 11, HeaderBackgroundColor = "#f00")]
 		public int ResolvedBugs { get; set; }
+
+		[ExcelColumn(OrderIndex = 16)]
+		public int ResolvedIssues { get; set; }
 
 		/// <summary>
 		/// Number of "done" points for which the tasks were picked before the reporting period.

@@ -12,15 +12,18 @@
 			var absoluteStart = start.AbsoluteStart();
 
 			var createdDuring = issues.Where(t => t.CreatedOn >= absoluteStart && t.CreatedOn <= absoluteEnd).ToList();
-			var resolvedDuring = issues.Where(t => t.ResolvedOn >= absoluteStart && t.ResolvedOn <= absoluteEnd && t.Status == "Done").ToList();
+			var doneDuring = issues.Where(t => t.ResolvedOn >= absoluteStart && t.ResolvedOn <= absoluteEnd && t.Status == "Done").ToList();
+			var resolvedDuring = issues.Where(t => t.ResolvedOn >= absoluteStart && t.ResolvedOn <= absoluteEnd).ToList();
 			var monthAgo = absoluteEnd.AddDays(-30).AbsoluteEnd();
 
 			var stats = new TeamMetrics
 			{
 				NewBugs = createdDuring.Count(t => t.Type == IssueType.Bug),
-				ResolvedBugs = resolvedDuring.Count(t => t.Type == IssueType.Bug),
-				StoryPointsDone = resolvedDuring.Sum(t => t.StoryPoints ?? 0),
-				StoryPointsCarriedOver = resolvedDuring.Where(t => t.InProgressOn < start).Sum(t => t.StoryPoints ?? 0),
+				ResolvedBugs = doneDuring.Count(t => t.Type == IssueType.Bug),
+				NewIssues = createdDuring.Count(t => t.Type.IsOneOf(IssueType.Story, IssueType.Bug, IssueType.Task)),
+				ResolvedIssues = resolvedDuring.Count(t => t.Type.IsOneOf(IssueType.Story, IssueType.Bug, IssueType.Task)),
+				StoryPointsDone = doneDuring.Sum(t => t.StoryPoints ?? 0),
+				StoryPointsCarriedOver = doneDuring.Where(t => t.InProgressOn < start).Sum(t => t.StoryPoints ?? 0),
 				StoryPointsInCodeReview = issues.Where(t => t.InCodeReviewOn(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),
 				StoryPointsInProgress = issues.Where(t => t.InProgress(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),
 				StoryPointsReadyForDeploy = issues.Where(t => t.InReadyForDeploy(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),
@@ -53,7 +56,7 @@
 
 			foreach (var person in people)
 			{
-				var resolved = resolvedDuring
+				var resolved = doneDuring
 					.Where(t => t.Assignee == person)
 					.ToList();
 
@@ -67,7 +70,7 @@
 						issues.Where(t => t.Assignee == person && (t.InProgress(end) || t.InCodeReviewOn(end) || t.InReadyForDeploy(end))).Sum(t => t.StoryPoints ?? 0),
 
 					// Code reviews will count only once the story was done.
-					StoryPointsReviewed = resolvedDuring
+					StoryPointsReviewed = doneDuring
 						.Where(t => t.FirstReviewer == person || t.SecondReviewer == person)
 						.Sum(t => t.StoryPoints ?? 0)
 				};

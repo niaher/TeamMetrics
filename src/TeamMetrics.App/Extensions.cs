@@ -2,10 +2,16 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using OfficeOpenXml;
 
 	public static class Extensions
 	{
+		public static bool IsOneOf<T>(this T value, params T[] oneof)
+		{
+			return oneof.Contains(value);
+		}
+
 		public static DateTime Previous(this DateTime now, DayOfWeek dayOfWeek, int weeksAgo = 1)
 		{
 			DayOfWeek lastDayOfWeek = dayOfWeek;

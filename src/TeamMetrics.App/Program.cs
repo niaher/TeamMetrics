@@ -14,7 +14,7 @@
 		{
 			var issues = ReadJiraCsvFile("jira.csv");
 
-			//ByTimePeriod(issues);
+			ByTimePeriod(issues);
 
 			//BySprint(issues);
 
