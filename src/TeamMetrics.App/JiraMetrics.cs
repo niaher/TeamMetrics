@@ -21,7 +21,7 @@
 		/// Average number of days from the time a bug reported until the fix is deployed.
 		/// </summary>
 		[ExcelColumn(OrderIndex = 32)]
-		public double AverateTimeToFixBug { get; set; }
+		public double AverageTimeToFixBug { get; set; }
 
 		[ExcelColumn(OrderIndex = 10, HeaderBackgroundColor = "#f00")]
 		public int NewBugs { get; set; }
