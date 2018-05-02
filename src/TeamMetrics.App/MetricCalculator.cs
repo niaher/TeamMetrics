@@ -27,7 +27,7 @@
 				StoryPointsInCodeReview = issues.Where(t => t.InCodeReviewOn(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),
 				StoryPointsInProgress = issues.Where(t => t.InProgress(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),
 				StoryPointsReadyForDeploy = issues.Where(t => t.InReadyForDeploy(absoluteEnd)).Sum(t => t.StoryPoints ?? 0),
-				AverateTimeToFixBug = issues
+				AverageTimeToFixBug = issues
 					.Where(t => t.ResolvedOn <= absoluteEnd && t.ResolvedOn >= monthAgo)
 					.Where(t => t.Type == IssueType.Bug)
 					.Select(t => t.TimeToComplete)
