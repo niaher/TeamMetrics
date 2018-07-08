@@ -84,7 +84,8 @@
 
 			stats.PersonStats = stats.PersonStats.OrderByDescending(t => t.Score).ToList();
 
-			var devs = stats.PersonStats.Where(t => t.FocusFactor > 0.2m).ToList();
+			var notDevs = new[] { "admin", "" };
+			var devs = stats.PersonStats.Where(t => t.FocusFactor > 0.2m && !notDevs.Contains(t.Name)).ToList();
 
 			if (devs.Count > 0)
 			{

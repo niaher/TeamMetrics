@@ -6,22 +6,42 @@
 	using System.Linq;
 	using CsvHelper;
 	using global::TeamMetrics.App.Excel;
+	using MoreLinq.Extensions;
 	using OfficeOpenXml;
 
 	public class Program
 	{
 		public static void Main(string[] args)
 		{
-			var issues = ReadJiraCsvFile("jira.csv");
+			var issues = ReadJiraCsvFiles(AppContext.BaseDirectory, "jira");
 
 			ByTimePeriod(issues);
 
 			//BySprint(issues);
 
-			ExportMetrics(issues);
+			//ExportMetrics(issues);
 
 			Console.WriteLine("Enter any key to exit...");
 			Console.ReadKey();
+		}
+
+		public static List<JiraIssue> ReadJiraCsvFiles(string folder, string fileNameStartsWith)
+		{
+			var files = Directory.GetFiles(folder)
+				.Where(t => Path.GetFileName(t).StartsWith(fileNameStartsWith, StringComparison.OrdinalIgnoreCase))
+				.ToList();
+
+			var issues = new List<JiraIssue>();
+
+			foreach (var file in files)
+			{
+				var issuesFromFile = ReadJiraCsvFile(file);
+				issues.AddRange(issuesFromFile);
+			}
+
+			return issues
+				.DistinctBy(t => t.Key)
+				.ToList();
 		}
 
 		private static void ExportMetrics(List<JiraIssue> issues)
